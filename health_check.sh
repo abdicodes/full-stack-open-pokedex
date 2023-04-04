@@ -1,5 +1,8 @@
 #!/bin/bash
 
-echo "Hello from shell script"
-
-exit 0 # exit status 0 means that the script "succeeds"
+response=$(curl -s https://pokkeeddex.fly.dev/health)
+if [ "$response" == "ok" ]; then
+  exit 1
+else
+  exit 0
+fi
