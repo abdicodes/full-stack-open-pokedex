@@ -35,13 +35,13 @@ processes = []
     timeout = "2s"
 
   [[services.http_checks]]
-    interval = "15s"
+    interval = 5000
     grace_period = "5s"
     method = "get"
     path = "/health"
     protocol = "http"
     restart_limit = 0
-    timeout = "2s"
+    timeout = 2000
     tls_skip_verify = false
     [services.http_checks.headers]
 
