@@ -12,6 +12,7 @@ const mapResults = ({ results }) =>
     name,
     id: parseInt(url.match(/\/(\d+)\//)[1]),
   }))
+const a = 2
 
 const App = () => {
   const {
