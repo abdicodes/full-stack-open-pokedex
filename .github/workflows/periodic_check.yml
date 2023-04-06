@@ -2,8 +2,8 @@ name: Periodic Checks
 
 on:
   schedule:
-    # Runs every 3 minutes
-    - cron: '*/3 * * * *'
+    # Runs at 18:15 UTC every day
+    - cron: '40 15 * * *'
 jobs:
   a_test_job:
     runs-on: ubuntu-20.04
@@ -12,7 +12,7 @@ jobs:
         uses: jtalk/url-health-check-action@v3
         with:
           # Check the following URLs one by one sequentially
-          url: https://pokkeeddex.fly.dev | https://pokkeeddex.fly.dev/healt
+          url: https://pokkeeddex.fly.dev | https://pokkeeddex.fly.dev/health
           # Fail this action after this many failed attempts
           max-attempts: 2 # Optional, defaults to 1
           # Delay between retries
