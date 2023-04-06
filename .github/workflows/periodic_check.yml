@@ -1,9 +1,9 @@
 name: Periodic Checks
 
 on:
-  schedule:
-    # Runs at 18:15 UTC every day
-    - cron: '40 15 * * *'
+  push:
+    branches:
+      - master
 jobs:
   a_test_job:
     runs-on: ubuntu-20.04
