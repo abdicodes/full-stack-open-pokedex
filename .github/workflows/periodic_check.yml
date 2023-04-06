@@ -2,8 +2,8 @@ name: Periodic Checks
 
 on:
   schedule:
-    # Runs at 18:15 UTC every day
-    - cron: '15 15 * * *'
+    # Runs every 3 minutes
+    - cron: '*/3 * * * *'
 jobs:
   a_test_job:
     runs-on: ubuntu-20.04
