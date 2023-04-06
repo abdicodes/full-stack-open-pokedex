@@ -1,80 +1,80 @@
-name: Deployment pipeline
+# name: Deployment pipeline
 
-on:
-  push:
-    branches:
-      - master
-  pull_request:
-    branches: [master]
-    types: [opened, synchronize]
+# on:
+#   push:
+#     branches:
+#       - master
+#   pull_request:
+#     branches: [master]
+#     types: [opened, synchronize]
 
-jobs:
-  simple_deployment_pipeline:
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-      - name: Install dependencies
-        run: npm install
-      - name: Linting
-        run: npm run eslint
-      - run: npm run build
-      - run: npm test
-      - name: e2e tests
-        uses: cypress-io/github-action@v5
-        with:
-          command: npm run test:e2e
-          start: npm run start-prod
-          wait-on: http://localhost:5000
-      - uses: superfly/flyctl-actions/setup-flyctl@master
-      - name: Deploy to production
-        if: ${{ github.event_name == 'push' }}
-        run: flyctl deploy --remote-only
-        env:
-          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+# jobs:
+#   simple_deployment_pipeline:
+#     runs-on: ubuntu-20.04
+#     steps:
+#       - uses: actions/checkout@v3
+#       - uses: actions/setup-node@v3
+#         with:
+#           node-version: '16'
+#       - name: Install dependencies
+#         run: npm install
+#       - name: Linting
+#         run: npm run eslint
+#       - run: npm run build
+#       - run: npm test
+#       - name: e2e tests
+#         uses: cypress-io/github-action@v5
+#         with:
+#           command: npm run test:e2e
+#           start: npm run start-prod
+#           wait-on: http://localhost:5000
+#       - uses: superfly/flyctl-actions/setup-flyctl@master
+#       - name: Deploy to production
+#         if: ${{ github.event_name == 'push' }}
+#         run: flyctl deploy --remote-only
+#         env:
+#           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
-      - name: Test Success
-        uses: rjstone/discord-webhook-notify@v1
-        if: success()
-        env:
-          URL: https://pokkeeddex.fly.dev
-          COMMIT_USER: ${{ join(toJson(github.event.head_commit.author.username)) }}
-        with:
-          severity: info
-          username: Success-alert
-          avatarUrl: https://upload.wikimedia.org/wikipedia/en/a/a6/Pokémon_Pikachu_art.png
-          description: 'to ${{env.URL}} by ${{env.COMMIT_USER}}'
-          footer: 'Severity: Informational.'
-          text: A new version of Pokedox is deployed!.
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+#       - name: Test Success
+#         uses: rjstone/discord-webhook-notify@v1
+#         if: success()
+#         env:
+#           URL: https://pokkeeddex.fly.dev
+#           COMMIT_USER: ${{ join(toJson(github.event.head_commit.author.username)) }}
+#         with:
+#           severity: info
+#           username: Success-alert
+#           avatarUrl: https://upload.wikimedia.org/wikipedia/en/a/a6/Pokémon_Pikachu_art.png
+#           description: 'to ${{env.URL}} by ${{env.COMMIT_USER}}'
+#           footer: 'Severity: Informational.'
+#           text: A new version of Pokedox is deployed!.
+#           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
 
-      - name: Test Failure
-        uses: rjstone/discord-webhook-notify@v1
-        if: failure()
-        env:
-          COMMIT_URL: ${{ join(toJson(github.event.head_commit.url)) }}
-          COMMIT_USER: ${{ join(toJson(github.event.head_commit.author.username)) }}
-        with:
-          severity: error
-          username: Failure-alert
-          avatarUrl: https://archives.bulbagarden.net/media/upload/f/fb/0001Bulbasaur.png
-          description: 'commit'
-          details: '${{env.COMMIT_URL}} by ${{env.COMMIT_USER}}'
-          footer: 'Severity: Error.'
-          text: Build failed!.
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+#       - name: Test Failure
+#         uses: rjstone/discord-webhook-notify@v1
+#         if: failure()
+#         env:
+#           COMMIT_URL: ${{ join(toJson(github.event.head_commit.url)) }}
+#           COMMIT_USER: ${{ join(toJson(github.event.head_commit.author.username)) }}
+#         with:
+#           severity: error
+#           username: Failure-alert
+#           avatarUrl: https://archives.bulbagarden.net/media/upload/f/fb/0001Bulbasaur.png
+#           description: 'commit'
+#           details: '${{env.COMMIT_URL}} by ${{env.COMMIT_USER}}'
+#           footer: 'Severity: Error.'
+#           text: Build failed!.
+#           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
 
-  tag_release:
-    needs: [simple_deployment_pipeline]
-    runs-on: ubuntu-20.04
-    env:
-      COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
-    steps:
-      - uses: actions/checkout@v3
-      - name: Bump version and push tag
-        if: ${{ github.event_name == 'push' && !contains(join(env.COMMIT_MESSAGES), '#skip')}}
-        uses: anothrNick/github-tag-action@1.61.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#   tag_release:
+#     needs: [simple_deployment_pipeline]
+#     runs-on: ubuntu-20.04
+#     env:
+#       COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
+#     steps:
+#       - uses: actions/checkout@v3
+#       - name: Bump version and push tag
+#         if: ${{ github.event_name == 'push' && !contains(join(env.COMMIT_MESSAGES), '#skip')}}
+#         uses: anothrNick/github-tag-action@1.61.0
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

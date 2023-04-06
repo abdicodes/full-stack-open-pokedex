@@ -8,12 +8,11 @@ jobs:
   a_test_job:
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v3
       - name: Check the deployed service URL
         uses: jtalk/url-health-check-action@v3
         with:
           # Check the following URLs one by one sequentially
-          url: https://pokkeeddex.fly.dev | https://pokkeeddex.fly.dev/health
+          url: https://pokkeeddex.fly.dev
           # Fail this action after this many failed attempts
           max-attempts: 2 # Optional, defaults to 1
           # Delay between retries
