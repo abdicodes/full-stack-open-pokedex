@@ -34,6 +34,7 @@ jobs:
         run: flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
       - name: Test Success
         uses: rjstone/discord-webhook-notify@v1
         if: success()
@@ -44,8 +45,7 @@ jobs:
           severity: info
           username: Success-alert
           avatarUrl: https://upload.wikimedia.org/wikipedia/en/a/a6/Pokémon_Pikachu_art.png
-          description: ''
-          details: 'to ${{env.URL}} by ${{env.COMMIT_USER}}'
+          description: 'to ${{env.URL}} by ${{env.COMMIT_USER}}'
           footer: 'Severity: Informational.'
           text: A new version of Pokedox is deployed!.
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
