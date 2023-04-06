@@ -3,9 +3,10 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import { useApi } from './useApi'
 import LoadingSpinner from './LoadingSpinner'
 import ErrorMessage from './ErrorMessage'
-import PokemonList from './PokemonList'
 import PokemonPage from './PokemonPage'
+import PokemonList from './PokemonList'
 
+let a
 const mapResults = ({ results }) =>
   results.map(({ url, name }) => ({
     url,
