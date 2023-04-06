@@ -53,7 +53,7 @@ jobs:
           username: Failure-alert
           avatarUrl: https://archives.bulbagarden.net/media/upload/f/fb/0001Bulbasaur.png
           description: 'commit'
-          details: `${{COMMIT_URL} by ${{COMMIT_USER}}`
+          details: ${{COMMIT_URL} by ${{COMMIT_USER}}
           footer: 'Severity: Error.'
           text: Build failed!.
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
